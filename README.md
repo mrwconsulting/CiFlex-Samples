@@ -1,4 +1,4 @@
-## **[Website](https://www.npmjs.com/package/@ciflex/ciflexctl)**
+## **Website: https://www.npmjs.com/package/@ciflex/ciflexctl**
 
 ## **Pipeline Samples:**
 
