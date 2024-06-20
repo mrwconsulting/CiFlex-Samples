@@ -1,0 +1,39 @@
+pluginName: SAST-Snyk
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Snyk Vulnerabilities Scanner
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands:
+  - DEFAULT_PIP_VIRTUALENV='false'
+  - DEFAULT_SNYK_SEVERITY_THRESHOLD='high'
+  - >-
+    if [ -z "${PIP_VIRTUALENV:-}" ];then
+    PIP_VIRTUALENV=${DEFAULT_PIP_VIRTUALENV};fi
+  - >-
+    if [ -z "${SNYK_SEVERITY_THRESHOLD:-}" ];then
+    SNYK_SEVERITY_THRESHOLD=${DEFAULT_SNYK_SEVERITY_THRESHOLD};fi
+  - >-
+    if [ "${PIP_VIRTUALENV}" == "true" ]; then
+    PATH=$PWD/.venv/bin:$PATH;source .venv/bin/activate;fi
+  - 'curl https://static.snyk.io/cli/${SNYK_VERSION}/snyk-alpine -o snyk'
+  - chmod +x ./snyk && mv ./snyk /usr/local/bin/
+  - 'snyk auth ${SNYK_API_TOKEN}'
+  - echo "Scanning code for vulnerabilities..."
+  - >-
+    DEBUG=*snyk* snyk test --all-projects --severity-threshold=${SNYK_SEVERITY_THRESHOLD}
+    --org=${SNYK_ORG_ID}
+  - 'snyk monitor --all-projects --org=${SNYK_ORG_ID}'
+installCommands: []
+variables:
+  SNYK_VERSION:
+    type: PLAINTEXT
+    value: v1.1290.0

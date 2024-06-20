@@ -1,3 +1,5 @@
+## **[Website](https://www.npmjs.com/package/@ciflex/ciflexctl)**
+
 ## **Pipeline Samples:**
 
 List of plugins implemented by all samples: <br>
@@ -11,7 +13,7 @@ List of plugins implemented by all samples: <br>
 
 3.  pluginName: 4.27-DinD <br>
     pluginAliasName: REGISTRY-DockerHub <br>
-    isActive: true <br>
+    isActive: false <br>
 
 4.  pluginName: 4.27-DinD <br>
     pluginAliasName: REGISTRY-GitHub <br>

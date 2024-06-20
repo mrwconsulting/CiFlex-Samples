@@ -1,0 +1,26 @@
+pluginName: 3.12-Poetry
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Python Poetry
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands:
+  - DEFAULT_PYTEST_DIR='tests'
+  - 'if [ ! -d build ]; then mkdir -p build;fi'
+  - 'if [ ! -d build/reports ]; then mkdir -p build/reports;fi'
+  - 'if [ -z "${PYTEST_DIR:-}" ];then export PYTEST_DIR=${DEFAULT_PYTEST_DIR};fi'
+  - POETRY_VIRTUALENVS_PATH=./build
+  - poetry install --compile
+  - >-
+    poetry run pytest --junitxml=build/reports/junit.xml --cov
+    --cov-report=xml:build/reports/coverage.xml ${PYTEST_DIR}/
+installCommands: []
+variables: {}

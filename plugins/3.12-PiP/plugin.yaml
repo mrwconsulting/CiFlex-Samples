@@ -1,0 +1,31 @@
+pluginName: 3.12-PiP
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Python PiP
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands:
+  - DEFAULT_PYTEST_DIR='tests'
+  - DEFAULT_REQUIREMENTS_FILE='./requirements.txt'
+  - 'if [ -z "${PYTEST_DIR:-}" ];then export PYTEST_DIR=${DEFAULT_PYTEST_DIR};fi'
+  - >-
+    if [ -z "${REQUIREMENTS_FILE:-}" ];then export
+    REQUIREMENTS_FILE=${DEFAULT_REQUIREMENTS_FILE};fi
+  - python -m venv .venv && source .venv/bin/activate
+  - >-
+    pip install coverage>=${PYTHON_COVERAGE_VERSION} && pip install -r
+    ${REQUIREMENTS_FILE}
+  - 'if [ ! -d .venv/reports ]; then mkdir -p .venv/reports;fi'
+  - >-
+    pytest --junitxml=.venv/reports/junit.xml --cov
+    --cov-report=xml:.venv/reports/coverage.xml ${PYTEST_DIR}/
+installCommands: []
+variables: {}

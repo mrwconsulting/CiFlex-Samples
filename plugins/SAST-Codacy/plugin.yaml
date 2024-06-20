@@ -1,0 +1,35 @@
+pluginName: SAST-Codacy
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Codacy Vulnerabilities Scanner
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands:
+  - DEFAULT_PIP_VIRTUALENV='false'
+  - DEFAULT_CODACY_COVERAGE_REPORT='coverage.xml'
+  - >-
+    if [ -z "${PIP_VIRTUALENV:-}" ];then
+    PIP_VIRTUALENV=${DEFAULT_PIP_VIRTUALENV};fi
+  - >-
+    if [ -z "${CODACY_COVERAGE_REPORT:-}" ];then
+    CODACY_COVERAGE_REPORT=${DEFAULT_CODACY_COVERAGE_REPORT};fi
+  - >-
+    if [ "${PIP_VIRTUALENV}" == "true" ]; then source
+    .venv/bin/activate;PATH=$PWD/.venv/bin:$PATH;fi
+  - echo "Scanning code for vulnerabilities..."
+  - >-
+    bash <(curl -Ls https://coverage.codacy.com/get.sh) report
+    --coverage-reports ${CODACY_COVERAGE_REPORT}
+installCommands: []
+variables:
+  CODACY_REPORTER_VERSION:
+    type: PLAINTEXT
+    value: 13.16.6
