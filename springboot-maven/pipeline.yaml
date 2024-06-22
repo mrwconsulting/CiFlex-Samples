@@ -18,7 +18,7 @@ source:
   codeStar:
     branch: main
     repository: mrwconsulting/CiFlex-Samples
-    codeStarArn: <CODESTAR_ARN>
+    codeStarArn: arn:aws:codestar-connections:us-east-1:730335505696:connection/7ad413b0-3194-4501-a085-64ea6c6cc053
 stages:
   - stageName: BuildStage
     pluginName: 3.9-Maven
