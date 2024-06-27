@@ -1,6 +1,6 @@
 pluginName: CDK-Synth
 pluginType: CodeBuildStep
-version: '1.0.0'
+version: 1.0.0
 description: Pipeline will automatically reconfigure itself to deploy stages and stacks
 policies:
   - effect: Allow
@@ -43,9 +43,12 @@ installCommands:
   - 'SCOPE=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r .npm.scope)'
   - 'REGISTRY=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r .npm.registry)'
   - 'TOKEN=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r .npm.token)'
+  - >-
+    CDK_VERSION=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r
+    .version.aws_cdk)
   - 'npm config set "//${REGISTRY}/:_authToken=${TOKEN}"'
   - 'npm config set "${SCOPE}:registry=https://${REGISTRY}/"'
-  - npm install -g aws-cdk@2.144.0
+  - 'npm install -g aws-cdk@${CDK_VERSION}'
 variables:
   CIFLEX_CONFIG_ENCODED:
     type: SECRETS_MANAGER
