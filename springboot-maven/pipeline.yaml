@@ -18,7 +18,7 @@ source:
   codeStar:
     branch: main
     repository: mrwconsulting/CiFlex-Samples
-    codeStarArn: arn:aws:codestar-connections:us-east-1:730335505696:connection/7ad413b0-3194-4501-a085-64ea6c6cc053
+    codeStarArn: <CODESTAR_ARN>
 stages:
   - stageName: BuildStage
     pluginName: 3.9-Maven
@@ -122,7 +122,7 @@ stages:
           - 'docker image save --output ${IMAGE_TAR_ARCHIVE} ${IMAGE_NAME}'
           - >-
             export TRIVY_EXIT_CODE=$(trivy image --input ${IMAGE_TAR_ARCHIVE}
-            --severity ${TRIVY_SEVERITY_LEVEL} --output target/jib-report.xml
+            --severity ${TRIVY_SEVERITY_LEVEL} --output target/buildpack-report.xml
             --format template --template "@contrib/junit.tpl")
         artifacts:
           BuildStage@OpenJDK:
