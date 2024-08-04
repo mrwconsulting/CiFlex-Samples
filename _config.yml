@@ -6,3 +6,5 @@ defaults:
     values:
       layout: default
 markdown: kramdown
+url: "https://mrwconsulting.github.io/CiFlex-Samples/"
+  - jekyll-sitemap
