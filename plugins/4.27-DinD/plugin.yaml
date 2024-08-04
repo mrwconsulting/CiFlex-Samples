@@ -1,0 +1,21 @@
+pluginName: 4.27-DinD
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Docker Inside Docker
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands: []
+installCommands:
+  - >-
+    nohup /usr/bin/dockerd --host=unix:///var/run/docker.sock
+    --host=tcp://127.0.0.1:2375 &
+  - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+variables: {}

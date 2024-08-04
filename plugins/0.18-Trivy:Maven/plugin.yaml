@@ -1,0 +1,33 @@
+pluginName: '0.18-Trivy:Maven'
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Trivy Vulnerability Scanner for Containers
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands:
+  - 'DEFAULT_TRIVY_SEVERITY_LEVEL="HIGH,CRITICAL"'
+  - >-
+    if [ -z "${TRIVY_SEVERITY_LEVEL:-}" ];then
+    TRIVY_SEVERITY_LEVEL=$DEFAULT_TRIVY_SEVERITY_LEVEL;fi
+  - echo "Container scanner for vulnerabilities..."
+  - >-
+    curl -sfL
+    https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh
+    | sh -s -- -b /usr/local/bin ${TRIVY_VERSION}
+installCommands:
+  - >-
+    nohup /usr/bin/dockerd --host=unix:///var/run/docker.sock
+    --host=tcp://127.0.0.1:2375 &
+  - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+variables:
+  TRIVY_VERSION:
+    type: PLAINTEXT
+    value: v0.50.1

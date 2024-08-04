@@ -1,0 +1,17 @@
+pluginName: 3.9-Maven
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Apache Maven
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands: []
+installCommands: []
+variables: {}

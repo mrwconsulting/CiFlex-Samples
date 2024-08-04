@@ -1,0 +1,14 @@
+version: '0.2'
+reports:
+  junit:
+    files:
+      - 'junit.xml'
+    base-directory: 'python-pip/.venv/reports'
+    file-format: 'JUNITXML'
+    discard-paths: no
+  coverage:
+    files:
+      - 'coverage.xml'
+    base-directory: 'python-pip/.venv/reports'
+    file-format: 'COBERTURAXML'
+    discard-paths: no

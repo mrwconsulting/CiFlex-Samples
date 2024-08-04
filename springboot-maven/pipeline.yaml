@@ -1,0 +1,244 @@
+info:
+  client: samples
+  project: springboot-maven
+metadata:
+  COMPUTE_TYPE: small
+  PROJECT_WORKSPACE: springboot-maven
+  CUSTOM_VERSION_ENABLED: 'true'
+  CUSTOM_PIPELINE_VERSION: latest
+notification:
+  enabled: true
+  events:
+    - PIPELINE_EXECUTION_FAILED
+    - PIPELINE_EXECUTION_STARTED
+  emailAddress:
+    - support@mrwconsulting.tech
+source:
+  type: CodeStar
+  codeStar:
+    branch: main
+    repository: mrwconsulting/CiFlex-Samples
+    codeStarArn: <CODESTAR_ARN>
+stages:
+  - stageName: BuildStage
+    pluginName: 3.9-Maven
+    pluginAliasName: OpenJDK
+    isActive: true
+    commands:
+      - >-
+        if [ -z "${BUILD_NUMBER:-}" ];then export
+        BUILD_NUMBER=1.0.${CODEBUILD_BUILD_NUMBER};fi
+      - './mvnw clean install compile test package -Drevision=${BUILD_NUMBER}'
+    outputDirectory:
+      - target
+    partialBuildSpecFile: yaml/build-reports.yaml
+    postStep:
+      - pluginName: SAST-Codacy
+        pluginAliasName: SAST-Codacy
+        isActive: false
+        metadata:
+          'SAST-CODACY:PRIVILEGED': 'true'
+        commands: []
+        artifacts:
+          BuildStage@OpenJDK:
+            - type: output-directory
+              value: target
+        variables:
+          CODACY_API_TOKEN:
+            type: SECRETS_MANAGER
+            value: 'samples/codacy:api_token'
+          CODACY_PROJECT_TOKEN:
+            type: SECRETS_MANAGER
+            value: 'samples/codacy:project_token'
+          CODACY_PROJECT_NAME:
+            type: PLAINTEXT
+            value: CiFlex-Samples
+          CODACY_COVERAGE_REPORT:
+            type: PLAINTEXT
+            value: target/site/jacoco/jacoco.xml
+          CODACY_ORGANIZATION_PROVIDER:
+            type: PLAINTEXT
+            value: gh
+      - pluginName: SAST-Snyk
+        pluginAliasName: SAST-Snyk
+        isActive: false
+        commands: []
+        artifacts:
+          BuildStage@OpenJDK:
+            - type: output-directory
+              value: target
+        variables:
+          SNYK_ORG_ID:
+            type: SECRETS_MANAGER
+            value: 'samples/snyk:org_id'
+          SNYK_API_TOKEN:
+            type: SECRETS_MANAGER
+            value: 'samples/snyk:api_token'
+          SNYK_SEVERITY_THRESHOLD:
+            type: PLAINTEXT
+            value: high
+  - stageName: ImageStage
+    pluginName: '0.18-Trivy:Maven'
+    pluginAliasName: TRIVY-JiB
+    isActive: true
+    metadata:
+      '0.18-TRIVY:MAVEN:PRIVILEGED': 'true'
+    commands:
+      - >-
+        if [ -z "${BUILD_NUMBER:-}" ];then export
+        BUILD_NUMBER=1.0.${CODEBUILD_BUILD_NUMBER};fi
+      - './mvnw jib:dockerBuild -Drevision=${BUILD_NUMBER}'
+      - 'export IMAGE_TAG=${BUILD_NUMBER}'
+      - export IMAGE_TAR_ARCHIVE=target/jib-image.tar
+      - export IMAGE_NAME=$(jq -r '.image' target/jib-image.json)
+      - 'docker image save --output ${IMAGE_TAR_ARCHIVE} ${IMAGE_NAME}'
+      - >-
+        export TRIVY_EXIT_CODE=$(trivy image --input ${IMAGE_TAR_ARCHIVE}
+        --severity ${TRIVY_SEVERITY_LEVEL} --output target/jib-report.xml
+        --format template --template "@contrib/junit.tpl")
+    artifacts:
+      BuildStage@OpenJDK:
+        - type: output-directory
+          value: target
+    outputDirectory:
+      - target
+    partialBuildSpecFile: yaml/image-reports.yaml
+    preStep:
+      - pluginName: '0.18-Trivy:Maven'
+        pluginAliasName: TRIVY-BuildPack
+        isActive: true
+        metadata:
+          '0.18-TRIVY:MAVEN:PRIVILEGED': 'true'
+        commands:
+          - >-
+            if [ -z "${BUILD_NUMBER:-}" ];then export
+            BUILD_NUMBER=1.0.${CODEBUILD_BUILD_NUMBER};fi
+          - './mvnw spring-boot:build-image -Drevision=${BUILD_NUMBER}'
+          - 'export IMAGE_TAG=${BUILD_NUMBER}'
+          - export IMAGE_TAR_ARCHIVE=target/buildpack-image.tar
+          - >-
+            export IMAGE_NAME=$(docker images --format '{{.Repository}}
+            {{.Tag}}' | grep ${BUILD_NUMBER} | awk '{print $1}')
+          - 'docker image save --output ${IMAGE_TAR_ARCHIVE} ${IMAGE_NAME}'
+          - >-
+            export TRIVY_EXIT_CODE=$(trivy image --input ${IMAGE_TAR_ARCHIVE}
+            --severity ${TRIVY_SEVERITY_LEVEL} --output target/buildpack-report.xml
+            --format template --template "@contrib/junit.tpl")
+        artifacts:
+          BuildStage@OpenJDK:
+            - type: output-directory
+              value: target
+        outputDirectory:
+          - target
+        partialBuildSpecFile: yaml/image-reports.yaml
+    postStep:
+      - pluginName: 4.27-DinD
+        pluginAliasName: REGISTRY-DockerHub
+        isActive: false
+        metadata:
+          '4.27-DIND:PRIVILEGED': 'true'
+        commands:
+          - >-
+            echo ${DOCKERHUB_ACCESS_TOKEN} | docker login -u
+            ${DOCKERHUB_USERNAME} --password-stdin ${DOCKERHUB_URL}
+          - 'docker image load --input ${IMAGE_TAR_ARCHIVE}'
+          - >-
+            SOURCE_IMAGE=$(echo ${IMAGE_NAME}:${IMAGE_TAG} | tr '[:upper:]'
+            '[:lower:]')
+          - >-
+            TARGET_IMAGE=$(echo ${DOCKERHUB_REPOSITORY}:${IMAGE_NAME}-${IMAGE_TAG}
+            | tr '[:upper:]' '[:lower:]')
+          - 'docker tag ${SOURCE_IMAGE} ${TARGET_IMAGE}'
+          - 'docker push ${TARGET_IMAGE}'
+        artifacts:
+          ImageStage@TRIVY-BuildPack:
+            - type: exported-variable
+              value: IMAGE_TAG
+            - type: exported-variable
+              value: IMAGE_NAME
+            - type: exported-variable
+              value: IMAGE_TAR_ARCHIVE
+            - type: output-directory
+              value: target
+        variables:
+          DOCKERHUB_URL:
+            type: PLAINTEXT
+            value: 'https://index.docker.io/v1/'
+          DOCKERHUB_REPOSITORY:
+            type: PLAINTEXT
+            value: mrwconsulting/CiFlex-Samples
+          DOCKERHUB_USERNAME:
+            type: SECRETS_MANAGER
+            value: 'samples/dockerhub:username'
+          DOCKERHUB_ACCESS_TOKEN:
+            type: SECRETS_MANAGER
+            value: 'samples/dockerhub:access_token'
+      - pluginName: 4.27-DinD
+        pluginAliasName: REGISTRY-GitHub
+        isActive: false
+        metadata:
+          '4.27-DIND:PRIVILEGED': 'true'
+        commands:
+          - >-
+            echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_USERNAME}
+            --password-stdin ${GITHUB_URL}
+          - 'docker image load --input ${IMAGE_TAR_ARCHIVE}'
+          - >-
+            SOURCE_IMAGE=$(echo ${IMAGE_NAME}:${IMAGE_TAG} | tr '[:upper:]'
+            '[:lower:]')
+          - >-
+            TARGET_IMAGE=$(echo ${GITHUB_URL}/${GITHUB_REPOSITORY}/${IMAGE_NAME} |
+            tr '[:upper:]' '[:lower:]')
+          - 'docker tag ${SOURCE_IMAGE} ${TARGET_IMAGE}'
+          - 'docker push ${TARGET_IMAGE}'
+        artifacts:
+          ImageStage@TRIVY-JiB:
+            - type: exported-variable
+              value: IMAGE_TAG
+            - type: exported-variable
+              value: IMAGE_NAME
+            - type: exported-variable
+              value: IMAGE_TAR_ARCHIVE
+            - type: output-directory
+              value: target
+        variables:
+          GITHUB_URL:
+            type: PLAINTEXT
+            value: ghcr.io
+          GITHUB_REPOSITORY:
+            type: PLAINTEXT
+            value: mrwconsulting/CiFlex-Samples
+          GITHUB_USERNAME:
+            type: SECRETS_MANAGER
+            value: 'samples/github:username'
+          GITHUB_TOKEN:
+            type: SECRETS_MANAGER
+            value: 'samples/github:token'
+  - stageName: DeployStage
+    pluginName: Manual-Approval
+    isActive: false
+    postStep:
+      - pluginName: EKS-Deployment
+        pluginAliasName: EKS
+        isActive: false
+        commands:
+          - kubectl get pod
+        artifacts:
+          ImageStage@TRIVY-BuildPack:
+            - type: exported-variable
+              value: IMAGE_TAG
+            - type: exported-variable
+              value: IMAGE_NAME
+        variables:
+          CLUSTER_NAME:
+            type: PLAINTEXT
+            value: shinto
+          CLUSTER_REGION:
+            type: PLAINTEXT
+            value: us-east-1
+          CLUSTER_ROLE_ARN:
+            type: SECRETS_MANAGER
+            value: 'samples/eks:role_arn'
+          DEPLOYMENT_MANIFEST:
+            type: PLAINTEXT
+            value: ./deployment.yaml

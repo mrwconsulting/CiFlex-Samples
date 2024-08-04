@@ -1,0 +1,9 @@
+pluginName: Manual-Approval
+pluginType: ManualApprovalStep
+version: '1.0.0'
+description: Manual Approval
+policies: {}
+policyNames: []
+commands: []
+installCommands: []
+variables: {}

@@ -1,0 +1,9 @@
+version: '0.2'
+reports:
+  image-reports:
+    files:
+      - 'jib-report.xml'
+      - 'buildpack-report.xml'
+    base-directory: 'springboot-maven/target'
+    file-format: 'JUNIT'
+    discard-paths: no

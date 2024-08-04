@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ${IMAGE_NAME}
+spec:
+  containers:
+  - name: ${IMAGE_NAME}
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
+    ports:
+    - containerPort: 8080

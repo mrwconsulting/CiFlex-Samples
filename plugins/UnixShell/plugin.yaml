@@ -1,0 +1,17 @@
+pluginName: UnixShell
+pluginType: ShellStep
+version: '1.0.0'
+description: Alpine Linux
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands: []
+installCommands: []
+variables: {}

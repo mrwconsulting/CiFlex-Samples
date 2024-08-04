@@ -1,0 +1,14 @@
+version: '0.2'
+reports:
+  jacoco-reports:
+    files:
+      - '**/*'
+    base-directory: 'springboot-gradle/build/reports/jacoco/test'
+    file-format: 'JACOCOXML'
+    discard-paths: no
+  surefire-reports:
+    files:
+      - "**/*"
+    base-directory: 'springboot-gradle/build/test-results/test'
+    file-format: 'JUNITXML'
+    discard-paths: no

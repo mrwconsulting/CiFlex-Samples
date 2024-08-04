@@ -1,0 +1,55 @@
+pluginName: CDK-Synth
+pluginType: CodeBuildStep
+version: 1.0.0
+description: Pipeline will automatically reconfigure itself to deploy stages and stacks
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands:
+  - CIFLEX_FORMAT='YAML'
+  - DEFAULT_PIPELINE_CONFIG='pipeline.yaml'
+  - >-
+    if [ -f "./pipeline.properties" ];then BRANCH_NAME=$(git branch
+    --show-current | xargs); if [ -z "${BRANCH_NAME:-}" ];then BRANCH_NAME=$(git
+    branch --contains HEAD | sed -n '2p' | xargs); fi; if [ ! -z
+    "${BRANCH_NAME:-}" ];then PIPELINE_CONFIG=$(grep "${BRANCH_NAME}"
+    "./pipeline.properties" | cut -d'=' -f2); fi; fi;
+  - >-
+    if [ -z "${PIPELINE_CONFIG:-}" ];then export
+    PIPELINE_CONFIG=${DEFAULT_PIPELINE_CONFIG}; fi
+  - 'CIFLEX_PROPS=$(cat ${PIPELINE_CONFIG} | base64)'
+  - mkdir -p ciflex && cd ciflex
+  - unzip /usr/app/bootstrap.zip
+  - npm install
+  - npm run set-version
+  - 'export OUTPUT_DIRECTORY=''/tmp/cdk.out'' && mkdir -p ${OUTPUT_DIRECTORY}'
+  - >-
+    cdk deploy --require-approval=never --no-notices --all
+    --output=${OUTPUT_DIRECTORY}
+  - export BUILD_ID=$(date +%s%3)
+  - 'export COMMIT_ID=$(echo "${BUILD_ID}" | md5sum)'
+  - >-
+    if [ ! -z "${CODEBUILD_RESOLVED_SOURCE_VERSION:-}" ];then export
+    COMMIT_ID=${CODEBUILD_RESOLVED_SOURCE_VERSION}; fi
+  - 'export SHORT_COMMIT_ID=${COMMIT_ID:0:8}'
+installCommands:
+  - 'SCOPE=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r .npm.scope)'
+  - 'REGISTRY=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r .npm.registry)'
+  - 'TOKEN=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r .npm.token)'
+  - >-
+    CDK_VERSION=$(echo ${CIFLEX_CONFIG_ENCODED} | base64 -d | jq -r
+    .version.aws_cdk)
+  - 'npm config set "//${REGISTRY}/:_authToken=${TOKEN}"'
+  - 'npm config set "${SCOPE}:registry=https://${REGISTRY}/"'
+  - 'npm install -g aws-cdk@${CDK_VERSION}'
+variables:
+  CIFLEX_CONFIG_ENCODED:
+    type: SECRETS_MANAGER
+    value: 'mrwconsulting/ciflex/config:config_encoded'

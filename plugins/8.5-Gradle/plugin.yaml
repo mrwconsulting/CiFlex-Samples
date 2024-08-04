@@ -1,0 +1,17 @@
+pluginName: 8.5-Gradle
+pluginType: CodeBuildStep
+version: '1.0.0'
+description: Apache Gradle
+policies:
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands: []
+installCommands: []
+variables: {}

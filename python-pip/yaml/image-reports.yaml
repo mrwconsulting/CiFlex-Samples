@@ -1,0 +1,8 @@
+version: '0.2'
+reports:
+  image-reports:
+    files:
+      - 'buildpack-report.xml'
+    base-directory: 'python-pip'
+    file-format: 'JUNIT'
+    discard-paths: no

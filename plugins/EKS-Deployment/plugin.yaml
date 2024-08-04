@@ -1,0 +1,31 @@
+pluginName: EKS-Deployment
+pluginType: CodeBuildStep
+version: 1.0.0
+description: EKS Deployment
+policies:
+  - effect: Allow
+    actions:
+      - 'sts:AssumeRole'
+      - 'eks:DescribeCluster'
+    resources:
+      - 'arn:aws:eks:*:*:*'
+  - effect: Allow
+    actions:
+      - 'logs:CreateLogGroup'
+      - 'logs:CreateLogStream'
+      - 'logs:PutLogEvents'
+      - 'logs:DescribeLogStreams'
+    resources:
+      - 'arn:aws:logs:*:*:*'
+policyNames: []
+commands:
+  - DEFAULT_CLUSTER_REGION='us-east-1'
+  - >-
+    if [ -z "${DEFAULT_CLUSTER_REGION:-}" ];then
+    CLUSTER_REGION=${DEFAULT_CLUSTER_REGION};fi
+  - >-
+    aws eks --region ${CLUSTER_REGION} update-kubeconfig --name ${CLUSTER_NAME}
+    --role-arn ${CLUSTER_ROLE_ARN}
+  - 'envsubst < ${DEPLOYMENT_MANIFEST} | kubectl apply -f -'
+installCommands: []
+variables: {}
