@@ -29,11 +29,11 @@ The CiFlex CICD Platform is an AWS CodePipeline generator, streamlining pipeline
 - [NodeJS Version 20.12.1 or greater](https://nodejs.org/en/)
 - [Docker Desktop Version 24.0.2 or greater](https://docs.docker.com/engine/install/)
 - [AWS CLI Version 2.11.6 or greater](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- **CiFlex Token**: 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 (30-Day License)
+- **CiFlex Token**: xxxxxxxxxxxxxxxxxxxxxxxxxxxx (email: support@mrwconsulting.tech)
   
 ### **Usage**
 ```bash
-export CIFLEX_TOKEN=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
+export CIFLEX_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 npm config set //npm.pkg.github.com/:_authToken $CIFLEX_TOKEN
 npm config set @mrwconsulting:registry https://npm.pkg.github.com/
@@ -49,7 +49,7 @@ ciflexctl --version
     ```bash
     export AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
     export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
-    export CIFLEX_TOKEN=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
+    export CIFLEX_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     npm config set //npm.pkg.github.com/:_authToken $CIFLEX_TOKEN
     npm config set @mrwconsulting:registry https://npm.pkg.github.com/
@@ -103,7 +103,7 @@ ciflexctl --version
 ```bash
 export AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
 export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
-export CIFLEX_TOKEN=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
+export CIFLEX_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 cd springboot-maven
 ../bin/access-token.sh 
