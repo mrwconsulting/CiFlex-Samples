@@ -98,7 +98,7 @@ ciflexctl --version
     Catalog repository initialized... 
 
 ### **Pipeline Samples**
-- [Fork CiFlex Samples Repository](https://mrwconsulting.github.io/CiFlex-Samples/)
+- [Fork CiFlex Samples Repository](https://github.com/mrwconsulting/CiFlex-Samples)
 - Edit pipeline.yaml, replacing "CodeStarArn" attribute value with your own
   
 ```bash
