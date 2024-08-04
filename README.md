@@ -1,4 +1,5 @@
 ## **Welcome to CiFlex CICD Platform** ##
+![ciflex-platform](https://github.com/user-attachments/assets/c42d1dde-a8d4-4f85-973a-4634961e8c26)
 
 [![](./images/ciflex-platform.jpg)](https://github.com/user-attachments/assets/20d3cb99-2dc4-41c0-97e4-32ab004486bb)
 
