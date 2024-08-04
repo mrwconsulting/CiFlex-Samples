@@ -100,6 +100,7 @@ ciflexctl --version
 ### **Pipeline Samples**
 - [Fork CiFlex Samples Repository](https://mrwconsulting.github.io/CiFlex-Samples/)
 - Edit pipeline.yaml, replacing "CodeStarArn" attribute value with your own
+  
 ```bash
 export AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
 export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
