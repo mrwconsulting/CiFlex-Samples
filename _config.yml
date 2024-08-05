@@ -1,7 +1,7 @@
 layout: post
 title: 'CICD Platform'
 title-on-all-pages: true
-canonical_url: 'https://mrwconsulting.github.io/CiFlex-Samples'
+canonical_url: 'https://mrwconsulting.github.io'
 keywords: >-
   AWS,CDK,CICD,CiFlex,CiFlexCtl,CloudFormation,CodeBuild,CodePipeline,ServiceCatalog,DevOps,Platform
 google_site_verification: OeGS0wbadQfPK17khgBr37EPrl70c4-V_gORkbjV5rg
@@ -11,8 +11,11 @@ defaults:
     values:
       layout: default
 markdown: kramdown
-url: 'https://mrwconsulting.github.io/CiFlex-Samples'
+url: 'https://mrwconsulting.github.io'
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
-og_image_title: CICD Platform
+og:
+  title: 'CICD Platform'
+twitter:
+  title: 'CICD Platform'
