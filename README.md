@@ -21,11 +21,11 @@ CICD Platform is an AWS CodePipeline generator that simplifies pipeline creation
 
 ### **AWS Service Catalog Integration**
 
-[![](https://img.youtube.com/vi/flOQveVQ04Q/0.jpg)](https://www.youtube.com/embed/flOQveVQ04Q?fs=0&autoplay=1&loop=1)
+[![AWS Service Catalog Integration](https://img.youtube.com/vi/flOQveVQ04Q/0.jpg)](https://www.youtube.com/embed/flOQveVQ04Q?fs=0&autoplay=1&loop=1)
 
 ### **Dynamically Configure AWS CodePipeline**
 
-[![](https://img.youtube.com/vi/U3SrheFSuDg/0.jpg)](https://www.youtube.com/embed/U3SrheFSuDg?fs=0&autoplay=1&loop=1)
+[![Dynamically Configure AWS CodePipeline](https://img.youtube.com/vi/U3SrheFSuDg/0.jpg)](https://www.youtube.com/embed/U3SrheFSuDg?fs=0&autoplay=1&loop=1)
 
 ### **Prerequisites**
 - [NodeJS Version 20.12.1 or greater](https://nodejs.org/en/)
