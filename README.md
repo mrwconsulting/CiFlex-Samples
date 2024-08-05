@@ -1,7 +1,7 @@
 ## **CICD Platform**
 ![ciflex-platform](https://github.com/user-attachments/assets/c42d1dde-a8d4-4f85-973a-4634961e8c26)
 
-The CiFlex CICD Platform is an AWS CodePipeline generator, streamlining pipeline creation by simplifying configuration for tasks such as building, unit testing, code style linting, and deploying. It's a fully managed continuous delivery service that automates AWS CodePipeline infrastructure, empowering DevOps teams to efficiently manage and automate their pipeline processes. With CiFlex, DevOps teams can create and publish plugins to introduce new features, enabling application teams to easily enhance their CICD workflows.
+CICD Platform is an AWS CodePipeline generator that simplifies pipeline creation by automating building, unit testing, code style linting, and deploying tasks. As a fully managed continuous delivery service, it leverages CDK, CloudFormation, and CodeBuild to streamline AWS CodePipeline infrastructure. This DevOps platform helps teams manage and automate their CI/CD processes efficiently. With CiFlex, DevOps teams can create and publish plugins to introduce new features and enhance their CI/CD workflows. Additionally, it integrates with ServiceCatalog to provide a comprehensive solution for managing CodePipeline setups.
 
 ## **Benefits:**
 
