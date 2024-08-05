@@ -13,5 +13,6 @@ defaults:
 markdown: kramdown
 url: 'https://mrwconsulting.github.io'
 plugins:
+  - jekyll-seo-tag
   - jekyll-paginate
   - jekyll-sitemap
