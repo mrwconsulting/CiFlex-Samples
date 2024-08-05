@@ -1,5 +1,5 @@
 title: mrwconsulting/ciflex-samples
-desccription: >-
+description: >-
   CICD Platform is an AWS CodePipeline generator that simplifies pipeline
   creation by automating building, unit testing, code style linting, and
   deploying tasks.As a fully managed continuous delivery service, this DevOps
@@ -9,6 +9,7 @@ desccription: >-
   introduce new features and enhance their CI/CD workflows. Additionally, it
   integrates with ServiceCatalog to provide a comprehensive solution for
   managing CodePipeline setups.
+tagline: CICD Platform is an AWS CodePipeline generator
 url: 'https://mrwconsulting.github.io'
 canonical_url: 'https://mrwconsulting.github.io'
 markdown: kramdown
