@@ -17,7 +17,7 @@ The CiFlex CICD Platform is an AWS CodePipeline generator, streamlining pipeline
 
 * **Command-Line Inteface**: A unified tool that offers a consistent interface for interacting with CiFlex APIs.
   
-* **Technology**: CDK,CICD,CloudFormation,CodeBuild,CodePipeline,Service Catalog,DevOps,Platform
+* **Technology**: CDK,Cognito,CloudFormation,CodeBuild,CodePipeline,Service Catalog
 
 ### **AWS Service Catalog Integration**
 
