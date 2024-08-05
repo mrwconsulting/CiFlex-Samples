@@ -15,7 +15,3 @@ url: 'https://mrwconsulting.github.io'
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
-og:
-  title: 'CICD Platform'
-twitter:
-  title: 'CICD Platform'
