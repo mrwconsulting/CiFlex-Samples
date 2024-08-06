@@ -100,7 +100,7 @@ ciflexctl --version
     Catalog repository initialized... 
 
 ### **Pipeline Samples**
-- [Fork CiFlex Samples Repository](https://github.com/mrwconsulting/CiFlex-Samples)
+- [Fork CiFlex Samples Repository](https://github.com/mrwconsulting/ciflex-samples)
 - Edit pipeline.yaml, replacing "CodeStarArn" attribute value with your own
   
 ```bash
@@ -150,6 +150,6 @@ A. Both stages and steps can be disabled by setting the 'isActive' attribute to 
 
 ### **Links**
 - Platform Setup: [https://youtu.be/qePkAgg8KAQ](https://youtu.be/qePkAgg8KAQ)
-- Pipeline Samples: [https://github.com/mrwconsulting/CiFlex-Samples](https://github.com/mrwconsulting/CiFlex-Samples)
-- API Docs: [https://github.com/mrwconsulting/CiFlex-Samples/blob/main/docs/README.md](https://github.com/mrwconsulting/CiFlex-Samples/blob/main/docs/README.md)
+- Pipeline Samples: [https://github.com/mrwconsulting/ciflex-samples](https://github.com/mrwconsulting/ciflex-samples)
+- API Docs: [https://github.com/mrwconsulting/ciflex-samples/blob/main/docs/README.md](https://github.com/mrwconsulting/ciflex-samples/blob/main/docs/README.md)
 
