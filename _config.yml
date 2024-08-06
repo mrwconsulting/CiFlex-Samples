@@ -13,7 +13,7 @@ tagline: CICD Platform is an AWS CodePipeline generator
 url: 'https://mrwconsulting.github.io'
 canonical_url: 'https://mrwconsulting.github.io'
 markdown: kramdown
-layout: post
+layout: page
 keywords: >-
   AWS,CDK,CICD,CiFlex,CiFlexCtl,CloudFormation,CodeBuild,CodePipeline,ServiceCatalog,DevOps,Platform
 google_site_verification: OeGS0wbadQfPK17khgBr37EPrl70c4-V_gORkbjV5rg
