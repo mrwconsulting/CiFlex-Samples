@@ -7,10 +7,8 @@ tagline: >-
   and Cognito, enhancing CI/CD workflows and integrating with ServiceCatalog.
 url: 'https://mrwconsulting.github.io'
 canonical_url: 'https://mrwconsulting.github.io'
-markdown: kramdown
 layout: page
-keywords: >-
-  AWS,CDK,CICD,Cognito,Dynamodb,CodeBuild,CodePipeline,ServiceCatalog,DevOps,Platform,CiFlex,CiFlexCtl
+markdown: kramdown
 google_site_verification: OeGS0wbadQfPK17khgBr37EPrl70c4-V_gORkbjV5rg
 defaults:
   - scope:
